@@ -205,6 +205,12 @@
             color: var(--text-body);
         }
 
+        /* Standard cursor for date to invite clicking */
+        input[type="datetime-local"],
+        input[type="date"] {
+            cursor: pointer;
+        }
+
         /* === Buttons === */
         .btn-group {
             display: flex;
@@ -382,7 +388,7 @@
             min-width: auto;
         }
 
-        /* Bulk Edit Modal (Simple overlay) */
+        /* Bulk Edit Modal (Complex) */
         #bulkEditOverlay {
             display: none;
             position: fixed;
@@ -400,7 +406,10 @@
             background: white;
             padding: 24px;
             border-radius: 8px;
-            width: 400px;
+            width: 800px;
+            /* Wider for multiple fields */
+            max-height: 80vh;
+            overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
@@ -427,6 +436,19 @@
         .toast.show {
             transform: translateY(0);
             opacity: 1;
+        }
+
+        .delivery-header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-top: 10px;
+            border-bottom: 1px dashed var(--divider-color);
+            padding-bottom: 4px;
         }
     </style>
 </head>
@@ -488,7 +510,7 @@
                 </div>
                 <div class="form-group">
                     <label>Customer Order Date<span class="required">*</span></label>
-                    <input type="date" class="input-field">
+                    <input type="date" class="input-field" onclick="this.showPicker()">
                 </div>
                 <div class="form-group">
                     <label>Current Date<span class="required">*</span></label>
@@ -608,15 +630,15 @@
                 </div>
                 <div class="form-group">
                     <label>ETA/ETD Date</label>
-                    <input type="datetime-local" class="input-field">
+                    <input type="datetime-local" class="input-field" onclick="this.showPicker()">
                 </div>
                 <div class="form-group">
                     <label>Closing Date/Time</label>
-                    <input type="datetime-local" class="input-field">
+                    <input type="datetime-local" class="input-field" onclick="this.showPicker()">
                 </div>
                 <div class="form-group">
                     <label>Cut Off VGM (Date)</label>
-                    <input type="datetime-local" class="input-field">
+                    <input type="datetime-local" class="input-field" onclick="this.showPicker()">
                 </div>
 
                 <!-- Row 4 -->
@@ -646,10 +668,14 @@
                     </svg>
                     Pickup & Delivery Details
                 </div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="addDeliveryRow()">+ Add Delivery</button>
+                </div>
             </div>
 
-            <div class="form-grid">
-                <!-- Pickup -->
+            <div class="form-grid" id="pickupDeliveryGrid">
+                <!-- Pickup (Fixed) -->
+                <div class="delivery-header">Pickup</div>
                 <div class="form-group">
                     <label>Pickup Place<span class="required">*</span></label>
                     <input type="text" id="pd_pickupPlace" class="input-field" placeholder="LOC-000272 | LCB B2">
@@ -660,39 +686,11 @@
                 </div>
                 <div class="form-group">
                     <label>Pickup Date<span class="required">*</span></label>
-                    <input type="datetime-local" id="pd_pickupDate" class="input-field">
+                    <input type="datetime-local" id="pd_pickupDate" class="input-field" onclick="this.showPicker()">
                 </div>
 
-                <!-- Delivery 1 -->
-                <div class="form-group">
-                    <label>Delivery 1 Place</label>
-                    <input type="text" id="pd_d1Place" class="input-field" placeholder="CTNR 000760">
-                </div>
-                <div class="form-group" style="grid-column: span 2;">
-                    <label>Delivery 1 Address</label>
-                    <input type="text" id="pd_d1Addr" class="input-field"
-                        placeholder="CTNR 000760 | BMW MANUFACTURING...">
-                </div>
-                <div class="form-group">
-                    <label>Delivery 1 Date</label>
-                    <input type="datetime-local" id="pd_d1Date" class="input-field">
-                </div>
-
-                <!-- Delivery 2 -->
-                <div class="form-group">
-                    <label>Delivery 2 Place</label>
-                    <input type="text" id="pd_d2Place" class="input-field" placeholder="Type Location Name">
-                </div>
-                <div class="form-group" style="grid-column: span 2;">
-                    <label>Delivery 2 Address</label>
-                    <input type="text" id="pd_d2Addr" class="input-field">
-                </div>
-                <div class="form-group">
-                    <label>Delivery 2 Date</label>
-                    <input type="datetime-local" id="pd_d2Date" class="input-field">
-                </div>
-
-                <!-- Return -->
+                <!-- Return (Fixed, usually displayed here or at end) -->
+                <div class="delivery-header">Return</div>
                 <div class="form-group">
                     <label>Return Place</label>
                     <input type="text" id="pd_returnPlace" class="input-field" placeholder="LOC-000187 | SIAM DEPOT">
@@ -704,8 +702,11 @@
                 </div>
                 <div class="form-group">
                     <label>Return Date</label>
-                    <input type="datetime-local" id="pd_returnDate" class="input-field">
+                    <input type="datetime-local" id="pd_returnDate" class="input-field" onclick="this.showPicker()">
                 </div>
+
+                <!-- Deliveries will be injected here dynamically -->
+                <div id="dynamicDeliveriesStart" style="display:none;"></div>
             </div>
         </section>
 
@@ -713,10 +714,13 @@
         <section class="card">
             <div class="card-header">
                 <div class="card-title">
+                    <!-- Container Icon -->
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9" />
-                        <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6" />
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
                     </svg>
                     Container Details
                 </div>
@@ -802,32 +806,7 @@
             <div class="table-wrapper">
                 <table id="containerTable">
                     <thead>
-                        <tr>
-                            <th class="checkbox-col"><input type="checkbox" onclick="toggleAll(this)"></th>
-                            <th>Container Size</th>
-                            <th>Container Type</th>
-                            <th class="chk-cell">Hold</th>
-                            <th class="chk-cell">Direct</th>
-                            <th class="seq-col">No.</th>
-                            <th>Container Number</th>
-                            <th>Seal Number</th>
-
-                            <!-- Pickup -->
-                            <th>Pickup Place</th>
-                            <th>Pickup Date</th>
-
-                            <!-- Delivery 1 -->
-                            <th>Delivery 1 Place</th>
-                            <th>Delivery 1 Date</th>
-
-                            <!-- Delivery 2 -->
-                            <th>Delivery 2 Place</th>
-                            <th>Delivery 2 Date</th>
-
-                            <!-- Return -->
-                            <th>Return Place</th>
-                            <th>Return Date</th>
-                        </tr>
+                        <!-- Dynamic Header -->
                     </thead>
                     <tbody>
                         <!-- Rows will be injected by JS -->
@@ -851,28 +830,61 @@
 
     </div>
 
-    <!-- Bulk Edit Overlay -->
+    <!-- Bulk Edit Overlay (Advanced) -->
     <div id="bulkEditOverlay">
         <div class="modal-box">
             <h3 style="margin-bottom: 20px;">Bulk Edit Selected Containers</h3>
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label>Select Field to Update</label>
-                <select id="bulkEditField" class="input-field">
-                    <option value="size">Container Size</option>
-                    <option value="type">Container Type</option>
-                    <option value="pickupPlace">Pickup Place</option>
-                    <option value="pickupDate">Pickup Date</option>
-                    <option value="d1Place">Delivery 1 Place</option>
-                    <option value="d1Date">Delivery 1 Date</option>
-                    <option value="returnPlace">Return Place</option>
-                    <option value="returnDate">Return Date</option>
-                </select>
+            <p style="font-size:13px; color:var(--text-label); margin-bottom: 20px;">Enter values only for fields you
+                want to update. Leave empty to keep existing values.</p>
+
+            <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap:var(--space-md); align-items:end;">
+                <!-- Standard Fields -->
+                <div class="form-group">
+                    <label>Container Size</label>
+                    <select id="bulk_size" class="input-field">
+                        <option value="">(No Change)</option>
+                        <option value="20GP">20GP</option>
+                        <option value="40HC">40HC</option>
+                        <option value="45HC">45HC</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Container Type</label>
+                    <select id="bulk_type" class="input-field">
+                        <option value="">(No Change)</option>
+                        <option value="Dry">Dry</option>
+                        <option value="Reefer">Reefer</option>
+                        <option value="Open Top">Open Top</option>
+                    </select>
+                </div>
+
+                <!-- Pickup / Return -->
+                <div class="form-group">
+                    <label>Pickup Place</label>
+                    <input type="text" id="bulk_pickupPlace" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Pickup Date</label>
+                    <input type="datetime-local" id="bulk_pickupDate" class="input-field" onclick="this.showPicker()">
+                </div>
+
+                <div class="form-group">
+                    <label>Return Place</label>
+                    <input type="text" id="bulk_returnPlace" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Return Date</label>
+                    <input type="datetime-local" id="bulk_returnDate" class="input-field" onclick="this.showPicker()">
+                </div>
             </div>
-            <div class="form-group" style="margin-bottom: 24px;">
-                <label>New Value</label>
-                <input type="text" id="bulkEditValue" class="input-field">
+
+            <!-- Dynamic Delivery Fields Container for Bulk Edit -->
+            <div id="bulkDeliveryFields" class="form-grid"
+                style="grid-template-columns: 1fr 1fr; gap:var(--space-md); margin-top:10px;">
+                <!-- JS will inject Date/Place inputs for each delivery existing -->
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top:24px;">
                 <button class="btn-ghost" onclick="closeBulkEdit()">Cancel</button>
                 <button class="btn-primary" onclick="applyBulkEdit()">Apply Changes</button>
             </div>
@@ -891,14 +903,15 @@
     </div>
 
     <script>
-        // Use 'load' to ensure DOM is ready
+        let deliveryCount = 0; // Starts with 0 additional deliveries (we will add logic to start with e.g. 1)
+
         window.addEventListener('load', function () {
             // Set Current Date
             const now = new Date();
             const dateStr = now.toISOString().split('T')[0];
             document.getElementById('currentDate').value = dateStr;
 
-            // Generate Unique Order Job No: JB-YYYYMMDD-HHMMSS-mmm
+            // Generate Unique Job No
             const yyyy = now.getFullYear();
             const MM = String(now.getMonth() + 1).padStart(2, '0');
             const dd = String(now.getDate()).padStart(2, '0');
@@ -906,10 +919,106 @@
             const mm = String(now.getMinutes()).padStart(2, '0');
             const ss = String(now.getSeconds()).padStart(2, '0');
             const mmm = String(now.getMilliseconds()).padStart(3, '0');
+            document.getElementById('orderJobNo').value = `JB-${yyyy}${MM}${dd}-${hh}${mm}${ss}-${mmm}`;
 
-            const uniqueId = `JB-${yyyy}${MM}${dd}-${hh}${mm}${ss}-${mmm}`;
-            document.getElementById('orderJobNo').value = uniqueId;
+            // Initialize Deliveries: Start with Delivery 1 and Delivery 2 as default
+            addDeliveryRow(); // 1
+            addDeliveryRow(); // 2
+
+            // Initial Table Render
+            renderTableHeader();
         });
+
+        /* === Dynamic Delivery Logic === */
+        function addDeliveryRow() {
+            deliveryCount++;
+            const wrapper = document.getElementById('pickupDeliveryGrid');
+            const marker = document.getElementById('dynamicDeliveriesStart'); // insert before return?
+            // Actually, normally Return is last. So we should insert before the 'Return' header. 
+            // Finding the 'Return' header index in DOM is tricky with grid. 
+            // Simplified approach: Insert 'Deliveries' before 'Return', or just append them and move Return to end?
+            // Let's use `insertBefore` on the Return header element node, but Grid layout makes specific DOM order matching visual order easier.
+
+            // We'll append to the specific container or insert before Return elements.
+            // Let's assume order: Pickup... -> Delivery 1... -> Delivery N... -> Return...
+            // To do this dynamically in a single grid container, we need to find the Return elements.
+            // Hard to do robustly without a container div for Deliveries. Let's rely on specific placement.
+
+            // Better: Put Deliveries in a sub-container?
+            // The grid is flattening children. 
+            // Let's find reference node: The Return Header.
+            const headers = document.querySelectorAll('.delivery-header');
+            let returnHeader = null;
+            headers.forEach(h => { if (h.innerText === 'Return') returnHeader = h; });
+
+            const frag = document.createDocumentFragment();
+
+            // Header
+            const hDiv = document.createElement('div');
+            hDiv.className = 'delivery-header';
+            hDiv.innerText = `Delivery ${deliveryCount}`;
+            frag.appendChild(hDiv);
+
+            // Place
+            const div1 = document.createElement('div');
+            div1.className = 'form-group';
+            div1.innerHTML = `<label>Delivery ${deliveryCount} Place</label><input type="text" id="pd_d${deliveryCount}Place" class="input-field" placeholder="Type Location">`;
+            frag.appendChild(div1);
+
+            // Address
+            const div2 = document.createElement('div');
+            div2.className = 'form-group';
+            div2.style.gridColumn = 'span 2';
+            div2.innerHTML = `<label>Delivery ${deliveryCount} Address</label><input type="text" id="pd_d${deliveryCount}Addr" class="input-field">`;
+            frag.appendChild(div2);
+
+            // Date
+            const div3 = document.createElement('div');
+            div3.className = 'form-group';
+            div3.innerHTML = `<label>Delivery ${deliveryCount} Date</label><input type="datetime-local" id="pd_d${deliveryCount}Date" class="input-field" onclick="this.showPicker()">`;
+            frag.appendChild(div3);
+
+            if (returnHeader) {
+                // Insert before Return Header
+                wrapper.insertBefore(frag, returnHeader);
+            } else {
+                wrapper.appendChild(frag); // Fallback
+            }
+
+            // Sync Table Header if table exists
+            renderTableHeader();
+        }
+
+        /* === Table Logic === */
+        function renderTableHeader() {
+            const thead = document.querySelector('#containerTable thead');
+            let html = `
+                <tr>
+                    <th class="checkbox-col"><input type="checkbox" onclick="toggleAll(this)"></th>
+                    <th>Container Size</th>
+                    <th>Container Type</th>
+                    <th class="chk-cell">Hold</th>
+                    <th class="chk-cell">Direct</th>
+                    <th class="seq-col">No.</th>
+                    <th>Container Number</th>
+                    <th>Seal Number</th>
+                    
+                    <th>Pickup Place</th>
+                    <th>Pickup Date</th>
+            `;
+
+            // Dynamic Delivery Columns
+            for (let i = 1; i <= deliveryCount; i++) {
+                html += `<th>Delivery ${i} Place</th><th>Delivery ${i} Date</th>`;
+            }
+
+            html += `
+                    <th>Return Place</th>
+                    <th>Return Date</th>
+                </tr>
+            `;
+            thead.innerHTML = html;
+        }
 
         /* === Bulk Edit Functions === */
         function openBulkEdit() {
@@ -918,6 +1027,26 @@
                 alert("Please select containers to edit.");
                 return;
             }
+
+            // Reset fields
+            document.querySelectorAll('#bulkEditOverlay input, #bulkEditOverlay select').forEach(i => i.value = '');
+
+            // Render Dynamic Delivery Inputs for Bulk Edit
+            const dynContainer = document.getElementById('bulkDeliveryFields');
+            dynContainer.innerHTML = '';
+            for (let i = 1; i <= deliveryCount; i++) {
+                dynContainer.innerHTML += `
+                    <div class="form-group">
+                        <label>Delivery ${i} Place</label>
+                        <input type="text" id="bulk_d${i}Place" class="input-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery ${i} Date</label>
+                        <input type="datetime-local" id="bulk_d${i}Date" class="input-field" onclick="this.showPicker()">
+                    </div>
+                `;
+            }
+
             document.getElementById('bulkEditOverlay').style.display = 'flex';
         }
 
@@ -926,47 +1055,59 @@
         }
 
         function applyBulkEdit() {
-            const field = document.getElementById('bulkEditField').value;
-            const value = document.getElementById('bulkEditValue').value;
-
             const checked = document.querySelectorAll('#containerTable tbody input[type="checkbox"]:checked');
+
+            // Capture values
+            const updates = {};
+            // Std
+            if (document.getElementById('bulk_size').value) updates.size = document.getElementById('bulk_size').value;
+            if (document.getElementById('bulk_type').value) updates.type = document.getElementById('bulk_type').value;
+            if (document.getElementById('bulk_pickupPlace').value) updates.pickupPlace = document.getElementById('bulk_pickupPlace').value;
+            if (document.getElementById('bulk_pickupDate').value) updates.pickupDate = document.getElementById('bulk_pickupDate').value;
+            if (document.getElementById('bulk_returnPlace').value) updates.returnPlace = document.getElementById('bulk_returnPlace').value;
+            if (document.getElementById('bulk_returnDate').value) updates.returnDate = document.getElementById('bulk_returnDate').value;
+
+            // Dynamic
+            for (let i = 1; i <= deliveryCount; i++) {
+                const p = document.getElementById(`bulk_d${i}Place`).value;
+                const d = document.getElementById(`bulk_d${i}Date`).value;
+                if (p) updates[`d${i}Place`] = p;
+                if (d) updates[`d${i}Date`] = d;
+            }
 
             checked.forEach(chk => {
                 const tr = chk.closest('tr');
                 if (!tr) return;
 
-                // Map field to cell index or class. Given simplified structure:
-                // Size=1, Type=2, PickupPlace=8, PickupDate=9, D1Place=10, D1Date=11, D2Place=12, D2Date=13, RetPlace=14, RetDate=15
-                // NOTE: indices 0-based
+                // Map to columns. Fixed Indices:
+                // 0:Chk, 1:Size, 2:Type, 3:Hold, 4:Direct, 5:No, 6:Cntr, 7:Seal, 8:PickP, 9:PickD
+                // Followed by 2*deliveryCount columns
+                // Last 2 are ReturnP, ReturnD
 
-                let cellIndex = -1;
-                // Simple mapping for this specific table structure
-                if (field === 'size') {
-                    // It's just text
-                    tr.cells[1].innerText = value;
-                } else if (field === 'type') {
-                    tr.cells[2].innerText = value;
-                } else {
-                    // Inputs
-                    if (field === 'pickupPlace') cellIndex = 8;
-                    else if (field === 'pickupDate') cellIndex = 9;
-                    else if (field === 'd1Place') cellIndex = 10;
-                    else if (field === 'd1Date') cellIndex = 11;
-                    else if (field === 'returnPlace') cellIndex = 14;
-                    else if (field === 'returnDate') cellIndex = 15;
+                if (updates.size) tr.cells[1].innerText = updates.size;
+                if (updates.type) tr.cells[2].innerText = updates.type;
 
-                    if (cellIndex > -1) {
-                        const input = tr.cells[cellIndex].querySelector('input');
-                        if (input) input.value = value;
-                    }
+                if (updates.pickupPlace) tr.cells[8].querySelector('input').value = updates.pickupPlace;
+                if (updates.pickupDate) tr.cells[9].querySelector('input').value = updates.pickupDate;
+
+                // Dynamic Deliveries
+                let colIdx = 10;
+                for (let i = 1; i <= deliveryCount; i++) {
+                    if (updates[`d${i}Place`]) tr.cells[colIdx].querySelector('input').value = updates[`d${i}Place`];
+                    if (updates[`d${i}Date`]) tr.cells[colIdx + 1].querySelector('input').value = updates[`d${i}Date`];
+                    colIdx += 2;
                 }
+
+                // Returns
+                if (updates.returnPlace) tr.cells[colIdx].querySelector('input').value = updates.returnPlace;
+                if (updates.returnDate) tr.cells[colIdx + 1].querySelector('input').value = updates.returnDate;
             });
 
             closeBulkEdit();
             handleSave('Bulk updated ' + checked.length + ' containers');
         }
 
-        /* === Table Operations === */
+        /* === Container Ops === */
         function handleSave(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').innerText = message;
@@ -1003,7 +1144,6 @@
         function renumberRows() {
             const rows = document.querySelectorAll('#containerTable tbody tr');
             rows.forEach((row, index) => {
-                // Column index 5 is 'No.' (0:check, 1:size, 2:type, 3:hold, 4:direct, 5:No.)
                 row.cells[5].innerText = index + 1;
             });
             document.getElementById('totalCount').innerText = rows.length;
@@ -1019,42 +1159,55 @@
             const hold = document.getElementById('chkHold').checked;
             const direct = document.getElementById('chkDirect').checked;
 
-            // Pickup & Delivery Auto-Populate Values
+            // Pickup & Return (Fixed)
             const pp = document.getElementById('pd_pickupPlace').value;
             const pd = document.getElementById('pd_pickupDate').value;
-            const d1p = document.getElementById('pd_d1Place').value;
-            const d1d = document.getElementById('pd_d1Date').value;
-            const d2p = document.getElementById('pd_d2Place').value;
-            const d2d = document.getElementById('pd_d2Date').value;
             const rp = document.getElementById('pd_returnPlace').value;
             const rd = document.getElementById('pd_returnDate').value;
+
+            // Dynamic Delivery Values
+            const deliveries = [];
+            for (let i = 1; i <= deliveryCount; i++) {
+                deliveries.push({
+                    place: document.getElementById(`pd_d${i}Place`)?.value || '',
+                    date: document.getElementById(`pd_d${i}Date`)?.value || ''
+                });
+            }
 
             const tbody = document.querySelector('#containerTable tbody');
 
             for (let i = 0; i < qty; i++) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `
+                // Base Cells
+                let html = `
                     <td class="checkbox-col"><input type="checkbox"></td>
                     <td>${size}</td>
                     <td>${type}</td>
                     <td class="chk-cell"><input type="checkbox" ${hold ? 'checked' : ''}></td>
                     <td class="chk-cell"><input type="checkbox" ${direct ? 'checked' : ''}></td>
-                    <td class="seq-col"></td> <!-- Seq will be filled by renumberRows -->
+                    <td class="seq-col"></td>
                     <td><input type="text" placeholder="" class="input-field" style="width:120px;"></td>
-                    <td><input type="text" placeholder="" class="input-field" style="width:120px;"></td>
+                    <td><input type="text" placeholder="" class="input-field" style="width:120px;"></td> <!-- Seal -->
                     
                     <td><input type="text" value="${pp}" class="input-field"></td>
-                    <td><input type="datetime-local" value="${pd}" class="input-field" style="min-width:140px;"></td>
-                    
-                    <td><input type="text" value="${d1p}" class="input-field"></td>
-                    <td><input type="datetime-local" value="${d1d}" class="input-field" style="min-width:140px;"></td>
-                    
-                    <td><input type="text" value="${d2p}" class="input-field"></td>
-                    <td><input type="datetime-local" value="${d2d}" class="input-field" style="min-width:140px;"></td>
-                    
-                    <td><input type="text" value="${rp}" class="input-field"></td>
-                    <td><input type="datetime-local" value="${rd}" class="input-field" style="min-width:140px;"></td>
+                    <td><input type="datetime-local" value="${pd}" class="input-field" onclick="this.showPicker()"></td>
                 `;
+
+                // Delivery Cells
+                deliveries.forEach(del => {
+                    html += `
+                        <td><input type="text" value="${del.place}" class="input-field"></td>
+                        <td><input type="datetime-local" value="${del.date}" class="input-field" onclick="this.showPicker()"></td>
+                     `;
+                });
+
+                // Return Cells
+                html += `
+                    <td><input type="text" value="${rp}" class="input-field"></td>
+                    <td><input type="datetime-local" value="${rd}" class="input-field" onclick="this.showPicker()"></td>
+                `;
+
+                tr.innerHTML = html;
                 tbody.appendChild(tr);
             }
 
