@@ -425,7 +425,7 @@
                         <line x1="16" y1="17" x2="8" y2="17"></line>
                         <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
-                    General Details
+                    General Details/Agent Details
                 </div>
             </div>
 
@@ -665,7 +665,7 @@
             </div>
         </section>
 
-        <!-- Card 2: Bulk Container Management -->
+        <!-- Card 2: Container Details -->
         <section class="card">
             <div class="card-header">
                 <div class="card-title">
@@ -674,62 +674,83 @@
                         <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9" />
                         <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6" />
                     </svg>
-                    Container Management
-                </div>
-                <div class="btn-group">
-                    <button class="btn-secondary" onclick="input-field">Delete Selected</button>
-                    <!-- <button class="btn-secondary">Bulk Update</button> -->
+                    Container Details
                 </div>
             </div>
 
-            <!-- Bulk Creation Toolbar -->
-            <div class="bulk-toolbar">
-                <h4>Bulk Add Containers (Pre-fill details)</h4>
+            <!-- Container Form Area -->
+            <div
+                style="padding-bottom: var(--space-md); border-bottom: 1px solid var(--divider-color); margin-bottom: var(--space-md);">
+                <div class="form-grid" style="grid-template-columns: 3fr 1fr; gap: var(--space-lg);">
 
-                <div class="form-group" style="flex: 0 0 100px;">
-                    <label>Quantity</label>
-                    <input type="number" id="bulkQty" value="1" min="1" max="50" class="input-field">
+                    <!-- Left Side: Inputs -->
+                    <div class="form-grid"
+                        style="grid-template-columns: repeat(3, 1fr); gap: var(--space-md); align-content: start;">
+                        <div class="form-group">
+                            <label>Container Size<span class="required">*</span></label>
+                            <select id="conSize" class="input-field">
+                                <option value="">--Select--</option>
+                                <option value="20GP">20GP</option>
+                                <option value="40HC">40HC</option>
+                                <option value="45HC">45HC</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Container Type<span class="required">*</span></label>
+                            <select id="conType" class="input-field">
+                                <option value="">--Select--</option>
+                                <option value="Dry">Dry</option>
+                                <option value="Reefer">Reefer</option>
+                                <option value="Open Top">Open Top</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>No. Of Containers<span class="required">*</span></label>
+                            <input type="number" id="conQty" value="1" min="1" class="input-field">
+                        </div>
+
+                        <div class="form-group" style="grid-column: span 1;">
+                            <label>More Information</label>
+                            <input type="text" id="conMoreInfo" class="input-field">
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Comment Con.</label>
+                            <input type="text" id="conComment" class="input-field">
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Checkboxes -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chkSP"> SP Handling
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chkHold"> Hold
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chkReefer"> Reefer
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chkDirect"> Direct To Factory
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chkDG"> DG Cargo
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <input type="checkbox" id="chk3Axles"> 3AxiesChassis
+                        </label>
+
+                        <div style="grid-column: span 2; margin-top: 10px; display: flex; justify-content: flex-end;">
+                            <button class="btn-primary" onclick="addBulkContainers()">Add Container</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="form-group" style="flex: 1;">
-                    <label>Size</label>
-                    <select id="bulkSize" class="input-field">
-                        <option value="20GP">20GP Standard</option>
-                        <option value="40HC">40HC High Cube</option>
-                        <option value="45HC">45HC</option>
-                    </select>
-                </div>
-
-                <div class="form-group" style="flex: 1;">
-                    <label>Type</label>
-                    <select id="bulkType" class="input-field">
-                        <option value="Dry">Dry</option>
-                        <option value="Reefer">Reefer</option>
-                        <option value="OpenTop">Open Top</option>
-                    </select>
-                </div>
-
-                <div class="form-group" style="flex: 1;">
-                    <label>Origin</label>
-                    <select id="bulkOrigin" class="input-field">
-                        <option value="Shanghai">Shanghai Port</option>
-                        <option value="Shenzhen">Shenzhen Port</option>
-                    </select>
-                </div>
-
-                <div class="form-group" style="flex: 1;">
-                    <label>Weight (Net)</label>
-                    <input type="text" id="bulkWeight" placeholder="kg" class="input-field">
-                </div>
-
-                <button class="btn-primary" onclick="addBulkContainers()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Add Containers
-                </button>
+            <!-- Action Bar -->
+            <div style="margin-bottom: var(--space-sm);">
+                <button class="btn-primary" style="background-color: #0052cc;" onclick="deleteSelectedRows()">Delete
+                    Container</button>
             </div>
 
             <!-- Container Table -->
@@ -737,15 +758,15 @@
                 <table id="containerTable">
                     <thead>
                         <tr>
-                            <th class="checkbox-col"><input type="checkbox"></th>
+                            <th class="checkbox-col"><input type="checkbox" onclick="toggleAll(this)"></th>
                             <th style="width: 50px;">#</th>
+                            <th>Info</th>
                             <th>Container No.</th>
                             <th>Size</th>
                             <th>Type</th>
                             <th>Seal No.</th>
                             <th>Net Weight</th>
-                            <th>Pick-up Date</th>
-                            <th class="action-col"></th>
+                            <th>Flags</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -757,7 +778,6 @@
             <div
                 style="margin-top: var(--space-md); display: flex; justify-content: space-between; align-items: center; color: var(--text-label); font-size: 13px;">
                 <span>Total Containers: <strong id="totalCount">0</strong></span>
-                <button class="btn-link" onclick="handleSave('Bulk edit modal opened')">Advanced Bulk Edit</button>
             </div>
 
         </section>
@@ -801,9 +821,6 @@
 
             const uniqueId = `JB-${yyyy}${MM}${dd}-${hh}${mm}${ss}-${mmm}`;
             document.getElementById('orderJobNo').value = uniqueId;
-
-            // Initial Add Container call if wanted, or leave empty
-            addBulkContainers();
         });
 
         function handleSave(message) {
@@ -825,19 +842,49 @@
             updateCount();
         }
 
+        function deleteSelectedRows() {
+            const checkboxes = document.querySelectorAll('#containerTable tbody input[type="checkbox"]:checked');
+            if (checkboxes.length === 0) {
+                alert("Please select containers to delete.");
+                return;
+            }
+            checkboxes.forEach(chk => {
+                chk.closest('tr').remove();
+            });
+            updateCount();
+            handleSave(checkboxes.length + ' containers deleted');
+        }
+
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('#containerTable tbody input[type="checkbox"]');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
         function updateCount() {
             const count = document.querySelectorAll('#containerTable tbody tr').length;
             document.getElementById('totalCount').innerText = count;
         }
 
         function addBulkContainers() {
-            const qty = parseInt(document.getElementById('bulkQty').value) || 1;
-            const size = document.getElementById('bulkSize').value;
-            const type = document.getElementById('bulkType').value;
-            const weight = document.getElementById('bulkWeight').value || '';
-            const tbody = document.querySelector('#containerTable tbody');
+            const qty = parseInt(document.getElementById('conQty').value) || 1;
+            const size = document.getElementById('conSize').value;
+            const type = document.getElementById('conType').value;
+            const moreInfo = document.getElementById('conMoreInfo').value;
+            const comment = document.getElementById('conComment').value;
 
-            // Current row count for numbering (approx)
+            // Gather flags
+            let flags = [];
+            if (document.getElementById('chkSP').checked) flags.push("SP");
+            if (document.getElementById('chkReefer').checked) flags.push("Reefer");
+            if (document.getElementById('chkDG').checked) flags.push("DG");
+            if (document.getElementById('chkHold').checked) flags.push("Hold");
+            if (document.getElementById('chkDirect').checked) flags.push("Direct");
+            if (document.getElementById('chk3Axles').checked) flags.push("3Axles");
+            const flagStr = flags.join(", ");
+
+            const tbody = document.querySelector('#containerTable tbody');
             let currentCount = tbody.querySelectorAll('tr').length;
 
             for (let i = 0; i < qty; i++) {
@@ -846,29 +893,16 @@
                 tr.innerHTML = `
                     <td class="checkbox-col"><input type="checkbox"></td>
                     <td>${currentCount}</td>
-                    <td><input type="text" placeholder="CNTR Number" class="input-field"></td>
                     <td>
-                        <select class="input-field">
-                            <option ${size === '20GP' ? 'selected' : ''}>20GP</option>
-                            <option ${size === '40HC' ? 'selected' : ''}>40HC</option>
-                            <option ${size === '45HC' ? 'selected' : ''}>45HC</option>
-                        </select>
+                        <div style="font-size:12px; font-weight:500;">${moreInfo}</div>
+                        <div style="font-size:11px; color:#666;">${comment}</div>
                     </td>
-                    <td>
-                        <select class="input-field">
-                            <option ${type === 'Dry' ? 'selected' : ''}>Dry</option>
-                            <option ${type === 'Reefer' ? 'selected' : ''}>Reefer</option>
-                            <option ${type === 'OpenTop' ? 'selected' : ''}>Open Top</option>
-                        </select>
-                    </td>
-                    <td><input type="text" placeholder="Seal No." class="input-field"></td>
-                    <td><input type="text" value="${weight}" class="input-field"></td>
-                    <td><input type="datetime-local" class="input-field"></td>
-                    <td class="action-col">
-                        <button class="btn-icon-only" onclick="deleteRow(this)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </td>
+                    <td><input type="text" placeholder="CNTR Number" class="input-field" style="width:120px;"></td>
+                    <td>${size}</td>
+                    <td>${type}</td>
+                    <td><input type="text" placeholder="Seal No." class="input-field" style="width:100px;"></td>
+                    <td><input type="text" placeholder="kg" class="input-field" style="width:80px;"></td>
+                    <td><span style="font-size:11px; background:#eee; padding:2px 6px; border-radius:4px;">${flagStr || '-'}</span></td>
                 `;
                 tbody.appendChild(tr);
             }
