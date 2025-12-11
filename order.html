@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,8 @@
             /* Color Palette */
             --primary-color: #EA5B45;
             --primary-hover: #D04F3B;
-            --secondary-color: #172B4D; /* Dark heading text */
+            --secondary-color: #172B4D;
+            /* Dark heading text */
             --text-label: #5E6C84;
             --text-body: #172B4D;
             --bg-page: #F4F6F8;
@@ -17,7 +19,7 @@
             --bg-input: #F5F7FA;
             --border-color: #DFE1E6;
             --divider-color: #EBECF0;
-            
+
             /* Spacing & Sizing */
             --radius-card: 8px;
             --radius-input: 6px;
@@ -25,7 +27,7 @@
             --space-sm: 16px;
             --space-md: 24px;
             --space-lg: 32px;
-            
+
             /* Typography */
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
@@ -41,7 +43,8 @@
             background-color: var(--bg-page);
             color: var(--text-body);
             line-height: 1.5;
-            padding-bottom: 80px; /* Space for fixed footer if needed, or visual breathing room */
+            padding-bottom: 80px;
+            /* Space for fixed footer if needed, or visual breathing room */
         }
 
         /* === Layout & Containers === */
@@ -71,7 +74,7 @@
         .card {
             background: var(--bg-card);
             border-radius: var(--radius-card);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
             padding: var(--space-md);
             margin-bottom: var(--space-md);
             border: 1px solid transparent;
@@ -96,7 +99,8 @@
         }
 
         .card-title svg {
-            color: var(--text-label); /* Icon color */
+            color: var(--text-label);
+            /* Icon color */
         }
 
         /* === Forms & Grids === */
@@ -116,18 +120,29 @@
             grid-template-columns: repeat(4, 1fr);
             gap: var(--space-md) var(--space-sm);
         }
-        
+
         .form-grid.dense {
-             grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(5, 1fr);
         }
 
         @media (max-width: 1200px) {
-            .form-grid { grid-template-columns: repeat(3, 1fr); }
-            .form-grid.dense { grid-template-columns: repeat(4, 1fr); }
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .form-grid.dense {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
+
         @media (max-width: 900px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); }
-            .form-grid.dense { grid-template-columns: repeat(2, 1fr); }
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid.dense {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .form-group {
@@ -147,9 +162,12 @@
             margin-left: 2px;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             background-color: var(--bg-input);
-            border: 1px solid transparent; /* Looks filled by default */
+            border: 1px solid transparent;
+            /* Looks filled by default */
             border-radius: var(--radius-input);
             padding: 10px 12px;
             font-size: 14px;
@@ -159,22 +177,29 @@
             font-family: inherit;
         }
 
-        input:hover, select:hover, textarea:hover {
+        input:hover,
+        select:hover,
+        textarea:hover {
             background-color: #EBECF0;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             background-color: white;
             border-color: var(--primary-color);
             outline: none;
             box-shadow: 0 0 0 2px rgba(234, 91, 69, 0.1);
         }
-        
+
         /* Helper for date inputs to look consistent */
-        input[type="date"], input[type="time"] {
-            color: var(--text-label); 
+        input[type="date"],
+        input[type="time"] {
+            color: var(--text-label);
         }
-        input[type="date"]:valid, input[type="time"]:valid {
+
+        input[type="date"]:valid,
+        input[type="time"]:valid {
             color: var(--text-body);
         }
 
@@ -204,6 +229,7 @@
             background-color: var(--primary-color);
             color: white;
         }
+
         .btn-primary:hover {
             background-color: var(--primary-hover);
         }
@@ -213,15 +239,17 @@
             border-color: var(--primary-color);
             color: var(--primary-color);
         }
+
         .btn-secondary:hover {
             background-color: rgba(234, 91, 69, 0.05);
         }
-        
+
         .btn-ghost {
             background-color: transparent;
             color: var(--text-label);
             font-weight: 500;
         }
+
         .btn-ghost:hover {
             color: var(--text-body);
             background-color: var(--bg-input);
@@ -233,10 +261,11 @@
             color: var(--primary-color);
             background: none;
         }
+
         .btn-link:hover {
             text-decoration: underline;
         }
-        
+
         .btn-icon-only {
             padding: 0;
             width: 38px;
@@ -244,16 +273,18 @@
             background: #F5F7FA;
             color: var(--text-label);
         }
+
         .btn-icon-only:hover {
             color: #d12e2e;
             background: #ffebeb;
         }
 
         /* === Container Bulk Management Section === */
-        
+
         /* The Bulk Toolbar */
         .bulk-toolbar {
-            background-color: #FFF8F6; /* Very subtle tint of primary or just grey */
+            background-color: #FFF8F6;
+            /* Very subtle tint of primary or just grey */
             border: 1px dashed var(--border-color);
             border-radius: var(--radius-input);
             padding: var(--space-sm);
@@ -263,7 +294,7 @@
             gap: var(--space-sm);
             flex-wrap: wrap;
         }
-        
+
         .bulk-toolbar h4 {
             width: 100%;
             font-size: 13px;
@@ -304,33 +335,42 @@
             border-bottom: 1px solid var(--divider-color);
             vertical-align: middle;
         }
-        
+
         tr:last-child td {
             border-bottom: none;
         }
 
         /* Small inputs inside table */
-        td input, td select {
+        td input,
+        td select {
             padding: 6px 8px;
             font-size: 13px;
             height: 32px;
             background: white;
             border: 1px solid var(--divider-color);
         }
-        
-        .checkbox-col { width: 40px; text-align: center; }
-        .action-col { width: 50px; text-align: center; }
-        
+
+        .checkbox-col {
+            width: 40px;
+            text-align: center;
+        }
+
+        .action-col {
+            width: 50px;
+            text-align: center;
+        }
+
         /* === Toast/Notification === */
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background-color: #36B37E; /* Success Green */
+            background-color: #36B37E;
+            /* Success Green */
             color: white;
             padding: 16px 24px;
             border-radius: var(--radius-card);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -339,23 +379,30 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
         }
-        
+
         .toast.show {
             transform: translateY(0);
             opacity: 1;
         }
-
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        
+
         <!-- Header -->
         <header class="header">
             <h1 class="page-title">
                 <!-- Icon: Box/Order -->
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
                 Create New Order
             </h1>
             <div class="btn-group">
@@ -364,22 +411,27 @@
             </div>
         </header>
 
-        <!-- Card 1: Combined General Details -->
+        <!-- Card 1: Combined General & Agent Details -->
         <section class="card">
             <div class="card-header">
                 <div class="card-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    General Information
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    General Details
                 </div>
             </div>
 
             <div class="form-grid">
-                <!-- Context -->
-                <div class="form-section-label">Order Context</div>
-                
+                <!-- Row 1 -->
                 <div class="form-group">
                     <label>Order Type<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>Import</option>
                         <option>Export</option>
                         <option>Domestic</option>
@@ -387,23 +439,22 @@
                 </div>
                 <div class="form-group">
                     <label>Order Job No.<span class="required">*</span></label>
-                    <input type="text" value="JB-2025-001" readonly>
+                    <input type="text" id="orderJobNo" readonly class="input-field"
+                        style="background-color: #EBECF0; color: #5E6C84; cursor: not-allowed;">
                 </div>
                 <div class="form-group">
                     <label>Customer Order Date<span class="required">*</span></label>
-                    <input type="date" value="2025-12-11">
+                    <input type="date" class="input-field">
                 </div>
                 <div class="form-group">
-                    <label>Current Date</label>
-                    <input type="date" value="2025-12-11" readonly>
+                    <label>Current Date<span class="required">*</span></label>
+                    <input type="date" id="currentDate" readonly class="input-field">
                 </div>
 
-                <!-- Customer Details -->
-                <div class="form-section-label">Customer & Cargo Details</div>
-
+                <!-- Row 2 -->
                 <div class="form-group">
                     <label>Account Name<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option selected disabled>Select Customer...</option>
                         <option>Global Traders Ltd.</option>
                         <option>Acme Corp</option>
@@ -411,69 +462,143 @@
                 </div>
                 <div class="form-group">
                     <label>Customer Site<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>Main Warehouse</option>
                         <option>Factory Outlet</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Reference Order No.</label>
-                    <input type="text" placeholder="e.g. REF-9988">
+                    <label>Invoice/Customer Shipment</label>
+                    <input type="text" class="input-field">
                 </div>
                 <div class="form-group">
-                    <label>Commodity Name<span class="required">*</span></label>
-                    <select>
-                        <option>Electronics</option>
-                        <option>Textiles</option>
-                        <option>Perishables</option>
-                    </select>
+                    <label>Customer Reference Shipment<span class="required">*</span></label>
+                    <input type="text" class="input-field">
                 </div>
 
-                <!-- Transport / Agent -->
-                <div class="form-section-label">Transport & Agent</div>
+                <!-- Row 3 -->
+                <div class="form-group">
+                    <label>Order No./Reference Order No.</label>
+                    <input type="text" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <input type="text" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Running No.</label>
+                    <input type="text" class="input-field">
+                </div>
+                <!-- Empty spacer to maintain grid 4 alignment if needed, or let flow -->
+                <div></div>
+            </div>
 
+            <!-- Agent Section Divider -->
+            <div
+                style="margin: var(--space-lg) 0 var(--space-sm) 0; padding-bottom: var(--space-xs); border-bottom: 1px solid var(--divider-color); font-weight: 700; color: var(--secondary-color); display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Agent Details
+            </div>
+
+            <div class="form-grid">
+                <!-- Row 1 -->
                 <div class="form-group">
                     <label>Forwarder<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>DHL</option>
                         <option>Maersk</option>
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Contact Person</label>
+                    <input type="text" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Phone No.</label>
+                    <input type="text" class="input-field">
+                </div>
+                <div class="form-group">
                     <label>Agent Name<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>Best Shipping Agents</option>
                     </select>
                 </div>
+
+                <!-- Row 2 -->
                 <div class="form-group">
                     <label>Vessel Name<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>EVER GIVEN</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Voyage No.</label>
-                    <input type="text" placeholder="V.202X">
+                    <label>Voyage No./Flight No.</label>
+                    <input type="text" class="input-field">
                 </div>
-                
                 <div class="form-group">
                     <label>Destination Port<span class="required">*</span></label>
-                    <select>
+                    <select class="input-field">
                         <option>Rotterdam</option>
                         <option>Singapore</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>ETA Date<span class="required">*</span></label>
-                    <input type="date">
+                    <label>T/S Port</label>
+                    <select class="input-field">
+                        <option>None</option>
+                        <option>Dubai</option>
+                    </select>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="form-group">
+                    <label>Booking/BL<span class="required">*</span></label>
+                    <input type="text" class="input-field">
                 </div>
                 <div class="form-group">
-                    <label>Booking/BL no.<span class="required">*</span></label>
-                    <input type="text">
+                    <label>ETD Date<span class="required">*</span></label>
+                    <input type="date" class="input-field">
                 </div>
                 <div class="form-group">
-                    <label>Special Notes</label>
-                    <input type="text" placeholder="Handling instructions...">
+                    <label>ETA<span class="required">*</span></label>
+                    <input type="date" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Closing date<span class="required">*</span></label>
+                    <input type="date" class="input-field">
+                </div>
+
+                <!-- Row 4 -->
+                <div class="form-group">
+                    <label>Closing time<span class="required">*</span></label>
+                    <input type="time" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Cut off VGM</label>
+                    <input type="date" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Commodity Name<span class="required">*</span></label>
+                    <select class="input-field">
+                        <option>Electronics</option>
+                        <option>Textiles</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Special Note</label>
+                    <input type="text" class="input-field">
+                </div>
+
+                <!-- Row 5 -->
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Comment</label>
+                    <input type="text" class="input-field">
                 </div>
             </div>
         </section>
@@ -482,11 +607,15 @@
         <section class="card">
             <div class="card-header">
                 <div class="card-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9"/><path d="M9 22V12h6v10M2 10.6L12 2l10 8.6"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 9v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9" />
+                        <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6" />
+                    </svg>
                     Container Management
                 </div>
                 <div class="btn-group">
-                    <button class="btn-secondary" onclick="handleSave('Selected containers deleted')">Delete Selected</button>
+                    <button class="btn-secondary" onclick="input-field">Delete Selected</button>
                     <!-- <button class="btn-secondary">Bulk Update</button> -->
                 </div>
             </div>
@@ -494,15 +623,15 @@
             <!-- Bulk Creation Toolbar -->
             <div class="bulk-toolbar">
                 <h4>Bulk Add Containers (Pre-fill details)</h4>
-                
+
                 <div class="form-group" style="flex: 0 0 100px;">
                     <label>Quantity</label>
-                    <input type="number" id="bulkQty" value="1" min="1" max="50">
+                    <input type="number" id="bulkQty" value="1" min="1" max="50" class="input-field">
                 </div>
-                
+
                 <div class="form-group" style="flex: 1;">
                     <label>Size</label>
-                    <select id="bulkSize">
+                    <select id="bulkSize" class="input-field">
                         <option value="20GP">20GP Standard</option>
                         <option value="40HC">40HC High Cube</option>
                         <option value="45HC">45HC</option>
@@ -511,7 +640,7 @@
 
                 <div class="form-group" style="flex: 1;">
                     <label>Type</label>
-                    <select id="bulkType">
+                    <select id="bulkType" class="input-field">
                         <option value="Dry">Dry</option>
                         <option value="Reefer">Reefer</option>
                         <option value="OpenTop">Open Top</option>
@@ -520,7 +649,7 @@
 
                 <div class="form-group" style="flex: 1;">
                     <label>Origin</label>
-                    <select id="bulkOrigin">
+                    <select id="bulkOrigin" class="input-field">
                         <option value="Shanghai">Shanghai Port</option>
                         <option value="Shenzhen">Shenzhen Port</option>
                     </select>
@@ -528,11 +657,15 @@
 
                 <div class="form-group" style="flex: 1;">
                     <label>Weight (Net)</label>
-                    <input type="text" id="bulkWeight" placeholder="kg">
+                    <input type="text" id="bulkWeight" placeholder="kg" class="input-field">
                 </div>
 
                 <button class="btn-primary" onclick="addBulkContainers()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     Add Containers
                 </button>
             </div>
@@ -555,59 +688,61 @@
                     </thead>
                     <tbody>
                         <!-- Rows will be injected by JS -->
-                        <tr>
-                            <td class="checkbox-col"><input type="checkbox"></td>
-                            <td>1</td>
-                            <td><input type="text" value="MSKU901283"></td>
-                            <td>
-                                <select>
-                                    <option>20GP</option>
-                                    <option>40HC</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select>
-                                    <option>Dry</option>
-                                    <option>Reefer</option>
-                                </select>
-                            </td>
-                            <td><input type="text" value="SL-8812"></td>
-                            <td><input type="text" value="22000"></td>
-                            <td><input type="date" value="2025-12-15"></td>
-                            <td class="action-col">
-                                <button class="btn-icon-only" onclick="deleteRow(this)">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                </button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
-            
-            <div style="margin-top: var(--space-md); display: flex; justify-content: space-between; align-items: center; color: var(--text-label); font-size: 13px;">
-                <span>Total Containers: <strong id="totalCount">1</strong></span>
+
+            <div
+                style="margin-top: var(--space-md); display: flex; justify-content: space-between; align-items: center; color: var(--text-label); font-size: 13px;">
+                <span>Total Containers: <strong id="totalCount">0</strong></span>
                 <button class="btn-link" onclick="handleSave('Bulk edit modal opened')">Advanced Bulk Edit</button>
             </div>
 
         </section>
 
         <!-- Fixed Bottom Actions (Optional but good for long forms) -->
-        <div style="display: flex; justify-content: flex-end; gap: var(--space-sm); border-top: 1px solid var(--divider-color); padding-top: var(--space-md);">
-             <button class="btn-secondary" onclick="handleSave('Draft saved successfully')">Save as Draft</button>
-             <button class="btn-primary" onclick="handleSave('Order created successfully')">Create Order</button>
+        <div
+            style="display: flex; justify-content: flex-end; gap: var(--space-sm); border-top: 1px solid var(--divider-color); padding-top: var(--space-md);">
+            <button class="btn-secondary" onclick="handleSave('Draft saved successfully')">Save as Draft</button>
+            <button class="btn-primary" onclick="handleSave('Order created successfully')">Create Order</button>
         </div>
 
     </div>
 
     <!-- Toast Component -->
     <div id="toast" class="toast">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
         <span id="toastMessage">Action Successful</span>
-        <button style="background:none; border:none; color:white; margin-left:12px; cursor:pointer;" onclick="hideToast()">✕</button>
+        <button style="background:none; border:none; color:white; margin-left:12px; cursor:pointer;"
+            onclick="hideToast()">✕</button>
     </div>
 
     <script>
-        // Simple Logic for the Demo
+        // Use 'load' to ensure DOM is ready
+        window.addEventListener('load', function () {
+            // Set Current Date
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            document.getElementById('currentDate').value = dateStr;
+
+            // Generate Unique Order Job No: JB-YYYYMMDD-HHMMSS-mmm
+            const yyyy = now.getFullYear();
+            const MM = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            const mmm = String(now.getMilliseconds()).padStart(3, '0');
+
+            const uniqueId = `JB-${yyyy}${MM}${dd}-${hh}${mm}${ss}-${mmm}`;
+            document.getElementById('orderJobNo').value = uniqueId;
+
+            // Initial Add Container call if wanted, or leave empty
+            addBulkContainers();
+        });
 
         function handleSave(message) {
             const toast = document.getElementById('toast');
@@ -639,34 +774,34 @@
             const type = document.getElementById('bulkType').value;
             const weight = document.getElementById('bulkWeight').value || '';
             const tbody = document.querySelector('#containerTable tbody');
-            
+
             // Current row count for numbering (approx)
             let currentCount = tbody.querySelectorAll('tr').length;
 
-            for(let i=0; i<qty; i++) {
+            for (let i = 0; i < qty; i++) {
                 currentCount++;
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="checkbox-col"><input type="checkbox"></td>
                     <td>${currentCount}</td>
-                    <td><input type="text" placeholder="CNTR Number"></td>
+                    <td><input type="text" placeholder="CNTR Number" class="input-field"></td>
                     <td>
-                        <select>
+                        <select class="input-field">
                             <option ${size === '20GP' ? 'selected' : ''}>20GP</option>
                             <option ${size === '40HC' ? 'selected' : ''}>40HC</option>
                             <option ${size === '45HC' ? 'selected' : ''}>45HC</option>
                         </select>
                     </td>
                     <td>
-                        <select>
+                        <select class="input-field">
                             <option ${type === 'Dry' ? 'selected' : ''}>Dry</option>
                             <option ${type === 'Reefer' ? 'selected' : ''}>Reefer</option>
                             <option ${type === 'OpenTop' ? 'selected' : ''}>Open Top</option>
                         </select>
                     </td>
-                    <td><input type="text" placeholder="Seal No."></td>
-                    <td><input type="text" value="${weight}"></td>
-                    <td><input type="date"></td>
+                    <td><input type="text" placeholder="Seal No." class="input-field"></td>
+                    <td><input type="text" value="${weight}" class="input-field"></td>
+                    <td><input type="date" class="input-field"></td>
                     <td class="action-col">
                         <button class="btn-icon-only" onclick="deleteRow(this)">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -680,4 +815,5 @@
         }
     </script>
 </body>
+
 </html>
