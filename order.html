@@ -702,12 +702,18 @@
                 <div class="delivery-header">Return</div>
                 <div class="form-group">
                     <label>Return Place</label>
-                    <input type="text" id="pd_returnPlace" class="input-field" placeholder="LOC-000187 | SIAM DEPOT">
+                    <select id="pd_returnPlace" class="input-field" onchange="autoFillAddress('return')">
+                        <option value="" disabled selected>Select Return Place...</option>
+                        <option value="SIAM DEPOT">SIAM DEPOT</option>
+                        <option value="Northport (Return)">Northport (Return)</option>
+                        <option value="Westport (Return)">Westport (Return)</option>
+                        <option value="Port Klang (Empty Depot)">Port Klang (Empty Depot)</option>
+                    </select>
                 </div>
                 <div class="form-group" style="grid-column: span 2;">
                     <label>Return Address</label>
-                    <input type="text" id="pd_returnAddr" class="input-field"
-                        placeholder="LOC-000187 | SIAM DEPOT | ...">
+                    <input type="text" id="pd_returnAddr" class="input-field" readonly
+                        style="background-color: #EBECF0;">
                 </div>
                 <div class="form-group">
                     <label>Return Date</label>
@@ -923,7 +929,12 @@
             'Denso (M) Sdn Bhd': '(Refer to Consignee)',
             'Nhava Sheva (POD)': '(Port Terminal)',
             'Kellogg Asia Product': 'Lot 1-5, Jalan Teknologi 5, Bandar Enstek',
-            'CMD Private Bonded Warehouse': 'Lot 183628, Jalan Sungai'
+            'CMD Private Bonded Warehouse': 'Lot 183628, Jalan Sungai',
+            // Return Places
+            'SIAM DEPOT': 'Lot 123, Jalan Siam, Port Klang',
+            'Northport (Return)': 'Northport Container Terminal',
+            'Westport (Return)': 'Westport Container Terminal',
+            'Port Klang (Empty Depot)': 'PKFZ, Port Klang'
         };
 
         // Delivery place options for dropdown
@@ -942,6 +953,9 @@
             } else if (type === 'delivery' && deliveryNum) {
                 placeEl = document.getElementById(`pd_d${deliveryNum}Place`);
                 addrEl = document.getElementById(`pd_d${deliveryNum}Addr`);
+            } else if (type === 'return') {
+                placeEl = document.getElementById('pd_returnPlace');
+                addrEl = document.getElementById('pd_returnAddr');
             }
             if (placeEl && addrEl) {
                 const selectedPlace = placeEl.value;
