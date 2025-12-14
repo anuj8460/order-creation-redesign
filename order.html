@@ -913,50 +913,49 @@
         function addDeliveryRow() {
             deliveryCount++;
             const wrapper = document.getElementById('pickupDeliveryGrid');
-            const marker = document.getElementById('dynamicDeliveriesStart'); // insert before return?
-            // Actually, normally Return is last. So we should insert before the 'Return' header. 
-            // Finding the 'Return' header index in DOM is tricky with grid. 
-            // Simplified approach: Insert 'Deliveries' before 'Return', or just append them and move Return to end?
-            // Let's use `insertBefore` on the Return header element node, but Grid layout makes specific DOM order matching visual order easier.
 
-            // We'll append to the specific container or insert before Return elements.
-            // Let's assume order: Pickup... -> Delivery 1... -> Delivery N... -> Return...
-            // To do this dynamically in a single grid container, we need to find the Return elements.
-            // Hard to do robustly without a container div for Deliveries. Let's rely on specific placement.
-
-            // Better: Put Deliveries in a sub-container?
-            // The grid is flattening children. 
-            // Let's find reference node: The Return Header.
+            // Find the Return Header to insert before it
             const headers = document.querySelectorAll('.delivery-header');
             let returnHeader = null;
             headers.forEach(h => { if (h.innerText === 'Return') returnHeader = h; });
 
             const frag = document.createDocumentFragment();
 
-            // Header
+            // Create a container div for this delivery (for easy removal)
+            const deliveryContainer = document.createElement('div');
+            deliveryContainer.className = 'delivery-block';
+            deliveryContainer.dataset.deliveryId = deliveryCount;
+            deliveryContainer.style.display = 'contents'; // So grid still works
+
+            // Header with remove button
             const hDiv = document.createElement('div');
             hDiv.className = 'delivery-header';
-            hDiv.innerText = `Delivery ${deliveryCount}`;
-            frag.appendChild(hDiv);
+            hDiv.innerHTML = `
+                <span>Delivery ${deliveryCount}</span>
+                <button type="button" class="btn-ghost" style="padding:2px 8px; height:auto; font-size:12px; color:#d12e2e;" onclick="removeDelivery(${deliveryCount})">✕ Remove</button>
+            `;
+            deliveryContainer.appendChild(hDiv);
 
             // Place
             const div1 = document.createElement('div');
             div1.className = 'form-group';
             div1.innerHTML = `<label>Delivery ${deliveryCount} Place</label><input type="text" id="pd_d${deliveryCount}Place" class="input-field" placeholder="Type Location">`;
-            frag.appendChild(div1);
+            deliveryContainer.appendChild(div1);
 
             // Address
             const div2 = document.createElement('div');
             div2.className = 'form-group';
             div2.style.gridColumn = 'span 2';
             div2.innerHTML = `<label>Delivery ${deliveryCount} Address</label><input type="text" id="pd_d${deliveryCount}Addr" class="input-field">`;
-            frag.appendChild(div2);
+            deliveryContainer.appendChild(div2);
 
             // Date
             const div3 = document.createElement('div');
             div3.className = 'form-group';
             div3.innerHTML = `<label>Delivery ${deliveryCount} Date</label><input type="datetime-local" id="pd_d${deliveryCount}Date" class="input-field" onclick="this.showPicker()">`;
-            frag.appendChild(div3);
+            deliveryContainer.appendChild(div3);
+
+            frag.appendChild(deliveryContainer);
 
             if (returnHeader) {
                 // Insert before Return Header
@@ -966,6 +965,47 @@
             }
 
             // Sync Table Header if table exists
+            renderTableHeader();
+        }
+
+        function removeDelivery(id) {
+            const block = document.querySelector(`.delivery-block[data-delivery-id="${id}"]`);
+            if (block) {
+                block.remove();
+            }
+
+            // Renumber remaining deliveries
+            const blocks = document.querySelectorAll('.delivery-block');
+            deliveryCount = blocks.length;
+
+            blocks.forEach((b, idx) => {
+                const num = idx + 1;
+                b.dataset.deliveryId = num;
+
+                // Update header text and button
+                const header = b.querySelector('.delivery-header span');
+                if (header) header.innerText = `Delivery ${num}`;
+                const removeBtn = b.querySelector('.delivery-header button');
+                if (removeBtn) removeBtn.setAttribute('onclick', `removeDelivery(${num})`);
+
+                // Update input IDs and labels
+                const inputs = b.querySelectorAll('input');
+                const labels = b.querySelectorAll('label');
+
+                inputs.forEach(inp => {
+                    if (inp.id.includes('Place')) inp.id = `pd_d${num}Place`;
+                    else if (inp.id.includes('Addr')) inp.id = `pd_d${num}Addr`;
+                    else if (inp.id.includes('Date')) inp.id = `pd_d${num}Date`;
+                });
+
+                labels.forEach(lbl => {
+                    if (lbl.innerText.includes('Place')) lbl.innerText = `Delivery ${num} Place`;
+                    else if (lbl.innerText.includes('Address')) lbl.innerText = `Delivery ${num} Address`;
+                    else if (lbl.innerText.includes('Date')) lbl.innerText = `Delivery ${num} Date`;
+                });
+            });
+
+            // Update table header
             renderTableHeader();
         }
 
