@@ -576,8 +576,13 @@
                 </div>
                 <div class="form-group">
                     <label>Agent Name</label>
-                    <select class="input-field">
-                        <option>Type Agent Name</option>
+                    <select id="agentName" class="input-field">
+                        <option value="" disabled selected>Select Agent...</option>
+                        <option value="Total Logistic Services">Total Logistic Services</option>
+                        <option value="DHL Global Forwarding Malaysia">DHL Global Forwarding Malaysia</option>
+                        <option value="Tasco Berhad">Tasco Berhad</option>
+                        <option value="Kerry Logistics Malaysia">Kerry Logistics Malaysia</option>
+                        <option value="Nippon Express Malaysia">Nippon Express Malaysia</option>
                     </select>
                 </div>
 
@@ -598,17 +603,25 @@
                 </div>
                 <div class="form-group">
                     <label>Destination Port</label>
-                    <select class="input-field">
-                        <option>Type Destination Port</option>
-                        <option>Rotterdam</option>
-                        <option>Singapore</option>
+                    <select id="destinationPort" class="input-field">
+                        <option value="" disabled selected>Select Destination Port...</option>
+                        <option value="Port Klang (MYPKG)">Port Klang (MYPKG)</option>
+                        <option value="Tanjung Pelepas (MYTPP)">Tanjung Pelepas (MYTPP)</option>
+                        <option value="Penang Port (MYPEN)">Penang Port (MYPEN)</option>
+                        <option value="Kuantan Port (MYKUA)">Kuantan Port (MYKUA)</option>
+                        <option value="Johor Port (MYJOH)">Johor Port (MYJOH)</option>
+                        <option value="Pasir Gudang (MYPGU)">Pasir Gudang (MYPGU)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>T/S Port</label>
-                    <select class="input-field">
-                        <option>Type TS Port</option>
-                        <option>Dubai</option>
+                    <select id="tsPort" class="input-field">
+                        <option value="" disabled selected>Select T/S Port...</option>
+                        <option value="Singapore (SGSIN)">Singapore (SGSIN)</option>
+                        <option value="Port Klang (MYPKG)">Port Klang (MYPKG)</option>
+                        <option value="Tanjung Pelepas (MYTPP)">Tanjung Pelepas (MYTPP)</option>
+                        <option value="Hong Kong (HKHKG)">Hong Kong (HKHKG)</option>
+                        <option value="Colombo (LKCMB)">Colombo (LKCMB)</option>
                     </select>
                 </div>
 
