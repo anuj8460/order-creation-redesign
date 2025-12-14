@@ -501,10 +501,12 @@
                 <!-- Row 2 -->
                 <div class="form-group">
                     <label>Account Name<span class="required">*</span></label>
-                    <select class="input-field">
-                        <option selected disabled>Select Customer...</option>
-                        <option>Global Traders Ltd.</option>
-                        <option>Acme Corp</option>
+                    <select id="accountName" class="input-field">
+                        <option value="" selected disabled>Select Customer...</option>
+                        <option value="Excellent Link (M) Sdn Bhd">Excellent Link (M) Sdn Bhd</option>
+                        <option value="Kellanova">Kellanova</option>
+                        <option value="Kellogg Asia Products Sdn Bhd">Kellogg Asia Products Sdn Bhd</option>
+                        <option value="Commercial Marketers / Tasco">Commercial Marketers / Tasco</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -557,9 +559,11 @@
                 <!-- Row 1 -->
                 <div class="form-group">
                     <label>Forwarder</label>
-                    <select class="input-field">
-                        <option>DHL Global Forwarding</option>
-                        <option>Maersk</option>
+                    <select id="forwarder" class="input-field">
+                        <option value="" disabled selected>Select Forwarder...</option>
+                        <option value="Total Logistic Services">Total Logistic Services</option>
+                        <option value="DHL Global Forwarding">DHL Global Forwarding</option>
+                        <option value="Tasco Berhad">Tasco Berhad</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -580,8 +584,12 @@
                 <!-- Row 2 -->
                 <div class="form-group">
                     <label>Vessel</label>
-                    <select class="input-field">
-                        <option>Type Vessel Name</option>
+                    <select id="vessel" class="input-field">
+                        <option value="" disabled selected>Select Vessel...</option>
+                        <option value="Bright Sakura">Bright Sakura</option>
+                        <option value="ESL Oman">ESL Oman</option>
+                        <option value="Ever Meed">Ever Meed</option>
+                        <option value="Kota Restu">Kota Restu</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -659,11 +667,18 @@
                 <div class="delivery-header">Pickup</div>
                 <div class="form-group">
                     <label>Pickup Place<span class="required">*</span></label>
-                    <input type="text" id="pd_pickupPlace" class="input-field" placeholder="LOC-000272 | LCB B2">
+                    <select id="pd_pickupPlace" class="input-field" onchange="autoFillAddress('pickup')">
+                        <option value="" disabled selected>Select Pickup Place...</option>
+                        <option value="Sony Supply Chain Solutions">Sony Supply Chain Solutions</option>
+                        <option value="Port Klang (POL)">Port Klang (POL)</option>
+                        <option value="Klang Multi Terminal S.B">Klang Multi Terminal S.B</option>
+                        <option value="ODD5-MTT Shpg Log. Centre">ODD5-MTT Shpg Log. Centre</option>
+                    </select>
                 </div>
                 <div class="form-group" style="grid-column: span 2;">
                     <label>Pickup Address</label>
-                    <input type="text" id="pd_pickupAddr" class="input-field" placeholder="LOC-000272 | LCB B2 | ...">
+                    <input type="text" id="pd_pickupAddr" class="input-field" readonly
+                        style="background-color: #EBECF0;">
                 </div>
                 <div class="form-group">
                     <label>Pickup Date<span class="required">*</span></label>
@@ -719,18 +734,16 @@
                             <label>Container Size<span class="required">*</span></label>
                             <select id="conSize" class="input-field">
                                 <option value="">--Select--</option>
-                                <option value="20GP">20GP</option>
-                                <option value="40HC">40HC</option>
-                                <option value="45HC">45HC</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Container Type<span class="required">*</span></label>
                             <select id="conType" class="input-field">
                                 <option value="">--Select--</option>
-                                <option value="Dry">Dry</option>
-                                <option value="Reefer">Reefer</option>
-                                <option value="Open Top">Open Top</option>
+                                <option value="GP">GP</option>
+                                <option value="HC">HC</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -886,6 +899,43 @@
     <script>
         let deliveryCount = 0; // Starts with 0 additional deliveries (we will add logic to start with e.g. 1)
 
+        // Address lookup data for auto-fill
+        const addressLookup = {
+            // Pickup Places
+            'Sony Supply Chain Solutions': 'Lot 524 (PT 40842) Jalan P10/10, Bandar Baru Bangi',
+            'Port Klang (POL)': '(Port Terminal)',
+            'Klang Multi Terminal S.B': 'Pulau Indah, Port Klang',
+            'ODD5-MTT Shpg Log. Centre': 'Westport',
+            // Delivery Places
+            'Denso (M) Sdn Bhd': '(Refer to Consignee)',
+            'Nhava Sheva (POD)': '(Port Terminal)',
+            'Kellogg Asia Product': 'Lot 1-5, Jalan Teknologi 5, Bandar Enstek',
+            'CMD Private Bonded Warehouse': 'Lot 183628, Jalan Sungai'
+        };
+
+        // Delivery place options for dropdown
+        const deliveryPlaceOptions = [
+            { value: 'Denso (M) Sdn Bhd', label: 'Denso (M) Sdn Bhd' },
+            { value: 'Nhava Sheva (POD)', label: 'Nhava Sheva (POD)' },
+            { value: 'Kellogg Asia Product', label: 'Kellogg Asia Product' },
+            { value: 'CMD Private Bonded Warehouse', label: 'CMD Private Bonded Warehouse' }
+        ];
+
+        function autoFillAddress(type, deliveryNum) {
+            let placeEl, addrEl;
+            if (type === 'pickup') {
+                placeEl = document.getElementById('pd_pickupPlace');
+                addrEl = document.getElementById('pd_pickupAddr');
+            } else if (type === 'delivery' && deliveryNum) {
+                placeEl = document.getElementById(`pd_d${deliveryNum}Place`);
+                addrEl = document.getElementById(`pd_d${deliveryNum}Addr`);
+            }
+            if (placeEl && addrEl) {
+                const selectedPlace = placeEl.value;
+                addrEl.value = addressLookup[selectedPlace] || '';
+            }
+        }
+
         window.addEventListener('load', function () {
             // Set Current Date
             const now = new Date();
@@ -936,17 +986,21 @@
             `;
             deliveryContainer.appendChild(hDiv);
 
-            // Place
+            // Place (Dropdown)
             const div1 = document.createElement('div');
             div1.className = 'form-group';
-            div1.innerHTML = `<label>Delivery ${deliveryCount} Place</label><input type="text" id="pd_d${deliveryCount}Place" class="input-field" placeholder="Type Location">`;
+            let placeOptions = '<option value="" disabled selected>Select Delivery Place...</option>';
+            deliveryPlaceOptions.forEach(opt => {
+                placeOptions += `<option value="${opt.value}">${opt.label}</option>`;
+            });
+            div1.innerHTML = `<label>Delivery ${deliveryCount} Place</label><select id="pd_d${deliveryCount}Place" class="input-field" onchange="autoFillAddress('delivery', ${deliveryCount})">${placeOptions}</select>`;
             deliveryContainer.appendChild(div1);
 
-            // Address
+            // Address (readonly, auto-filled)
             const div2 = document.createElement('div');
             div2.className = 'form-group';
             div2.style.gridColumn = 'span 2';
-            div2.innerHTML = `<label>Delivery ${deliveryCount} Address</label><input type="text" id="pd_d${deliveryCount}Addr" class="input-field">`;
+            div2.innerHTML = `<label>Delivery ${deliveryCount} Address</label><input type="text" id="pd_d${deliveryCount}Addr" class="input-field" readonly style="background-color: #EBECF0;">`;
             deliveryContainer.appendChild(div2);
 
             // Date
